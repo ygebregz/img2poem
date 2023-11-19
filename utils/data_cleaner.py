@@ -1,7 +1,10 @@
 """
+@author: Yonas Gebregziabher, CSCI 3725, M7: Poetry Slam
+
 This utility script file is responsible for preparing the Frank Ocean 
 lyrics to be embedded by our model. 
 """
+
 import re
 
 

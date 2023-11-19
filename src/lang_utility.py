@@ -1,9 +1,10 @@
 """
-@author: Yonas Gebregziabher, CSCI 3725, M6: Poetry Slam
+@author: Yonas Gebregziabher, CSCI 3725, M7: Poetry Slam
 
 This class provides functionalities to do operations
 at a sentence/word level. It enables searching for similar words
-related to a word as well as finding rhymes and more.
+related to a word as well as finding rhymes, generating quality 
+queries from detected objects and more.
 """
 
 from typing import List
@@ -13,13 +14,15 @@ from nltk import pos_tag
 import random
 from Phyme import Phyme
 import nltk
+import re
 
-PROXIMITY_DISTANCE = 4
+PROXIMITY_DISTANCE = 3
 
 
 class LanguageUtility:
     def __init__(self, glove_file_path: str =
                  "model/glove.6B.300d.txt") -> None:
+        "Initializes the LanguageUtility class"
         self.lang_tool = LanguageTool("en-US")
         print("Grammar checker is loaded!")
         self.glove_model = self.load_glove_model(glove_file_path)
@@ -31,7 +34,7 @@ class LanguageUtility:
         Loads the GloVe word embedding model and returns a dict with
         each word and their embeddings
         """
-        print("Loading Glove model!")
+        print("Loading GloVe model!")
         f = open(glove_file_path, "r")
         glove_model = {}
         for line in f:
@@ -45,69 +48,68 @@ class LanguageUtility:
     def find_closest_embeddings(self, word_embedding, k: int) -> List[str]:
         """
         Finds the closest K words that are semantically related to the
-        given word
+        given word embedding
         """
         if word_embedding is None:
-            return []  # Or handle the case appropriately
+            return []
 
         embedding_dot_product = np.dot(
             list(self.glove_model.values()), word_embedding)
         normalized = np.linalg.norm(
-            list(self.glove_model.values()), axis=1) * np.linalg.norm(word_embedding)
-        similarties = embedding_dot_product / normalized
-        top_k_similar_indices = np.argpartition(similarties, -k)[-k:]
+            list(self.glove_model.values()), axis=1) * \
+            np.linalg.norm(word_embedding)
+        similarities = embedding_dot_product / normalized
+        top_k_similar_indices = np.argpartition(similarities, -k)[-k:]
         most_similar_k_words = [list(self.glove_model.keys())[
             i] for i in top_k_similar_indices]
         return most_similar_k_words
 
     def calculate_similarity(self, word1, word2):
+        "Calculates the semantic similarity score between two words"
         if word1 in self.glove_model and word2 in self.glove_model:
             vector1 = self.glove_model[word1]
             vector2 = self.glove_model[word2]
-            return np.dot(vector1, vector2) / (np.linalg.norm(vector1) * np.linalg.norm(vector2))
+            return np.dot(vector1, vector2) / (np.linalg.norm(vector1) *
+                                               np.linalg.norm(vector2))
         else:
             return 0.0
 
-    def find_rhyming_word(self, word, pos_tag_last, replacement_word: str, used_rhymes: set[str]):
-        print(f"looking for a rhyme for {word} to replace {replacement_word}")
+    def find_rhyming_word(self, word, pos_tag_last, replacement_word: str,
+                          used_rhymes: set[str]):
         complete_rhymes = []
         try:
             complete_rhymes = self.ph.get_perfect_rhymes(
                 word)
         except:
-            return word  # TODO: find better idea for cases we dont have a rhyme
+            return word
         perfect_rhymes = complete_rhymes.get(1)
-        print(perfect_rhymes)
         if perfect_rhymes is None:
             perfect_rhymes = []
             for key in complete_rhymes.keys():
                 # in case no rhymes get alternative
                 perfect_rhymes.extend(complete_rhymes[key])
-        match_pos = [rhyme for rhyme in perfect_rhymes if pos_tag([rhyme])[
-            0][1] == pos_tag_last and word != rhyme and rhyme != replacement_word and rhyme not in used_rhymes]  # do not re-use
+        match_pos_unused = [rhyme for rhyme in perfect_rhymes if pos_tag([rhyme])[
+            0][1] == pos_tag_last and word != rhyme and rhyme != replacement_word
+            and rhyme not in used_rhymes]  # same pos thats a different word
+
         similarity_scores = [(similar_word, self.calculate_similarity(
-            replacement_word, similar_word)) for similar_word in match_pos]
+            replacement_word, similar_word)) for similar_word in match_pos_unused]
 
         # Sort based on similarity scores
         sorted_words = sorted(
             similarity_scores, key=lambda x: x[1], reverse=True)
         if len(sorted_words) >= 1:
-            print("found a good rhyme")
             random_top_5 = min(3, len(sorted_words))
             return random.choice(sorted_words[:random_top_5])[0]
-
-        print("Returning any match")
         return word if len(perfect_rhymes) == 0 else random.choice(perfect_rhymes)
 
     def correct_grammar(self, sentence: str) -> str:
-        print("before correcting", sentence)
         "Corrects simple grammatical errors"
         return self.lang_tool.correct(sentence)
 
     def clean_word(self, word: str) -> str:
-        letters_only = ''.join(
-            c for c in word if c.isalpha())
-        return letters_only.lower()
+        "Removes the non alphabetical characters from a word"
+        return re.sub('[^a-zA-Z]', '', word)
 
     def gen_quality_queries(self, detected_objects: List[str]) -> List[str]:
         """
@@ -118,15 +120,18 @@ class LanguageUtility:
         detected_objects_new = []
         for d in detected_objects:
             objc = d.split(" ")
-            detected_objects_new.extend(objc)  # non singular word objects
+            # non singular word objects, e.g "traffic lights"
+            detected_objects_new.extend(objc)
         complete_queries = []
         for obj in detected_objects_new:
             word_embedding = self.glove_model.get(obj)
-            synonyms = self.find_closest_embeddings(word_embedding, 4)
+            synonyms = self.find_closest_embeddings(
+                word_embedding, PROXIMITY_DISTANCE)
             complete_queries.append(" ".join(synonyms))
         return complete_queries
 
     def get_best_replacement(self, words_list: List[str], word: str) -> str:
+        "Gets a random valid replacement for all words in a list"
         random.shuffle(words_list)
         for w in words_list:
             if w.isalpha() and w.lower() in self.glove_model and w != word:
@@ -148,7 +153,6 @@ class LanguageUtility:
             line_pos_tags = line_pos_tags[:-1]
 
         modified_line = []
-        # DO POS TAG FOR WHOLE SENTENCE INSTEAD
         for word in line_pos_tags:
             if not word[0].isalpha():
                 continue
@@ -162,7 +166,7 @@ class LanguageUtility:
                 word_embedding, PROXIMITY_DISTANCE)
             matching_pos = [match for match in sim_words
                             if word_pos_tag == pos_tag([match])[
-                                0][1]]
+                                0][1]]  # replacement that matches same POS
             if len(matching_pos) >= 1:
                 best_choice = self.get_best_replacement(
                     matching_pos, clean_word)

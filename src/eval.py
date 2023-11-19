@@ -1,5 +1,5 @@
 """
-@author: Yonas Gebregziabher, CSCI 3725, M6: Poetry Slam
+@author: Yonas Gebregziabher, CSCI 3725, M7: Poetry Slam
 
 This class evaluates a Villanele poem]
 """
@@ -15,6 +15,10 @@ class VillanelleEvaluator:
         inspiring_lyrics = self.poem.get_inspiring_lyrics()
         # TODO: calc TD-IDF here
         pass
+
+    def check(self) -> float:
+        # TODO: also check that rhymes are not repeated
+        return 0.0
 
     def measure_rhyme_success() -> float:
         "Return % of successful rhymes"

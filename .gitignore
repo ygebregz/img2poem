@@ -1,5 +1,5 @@
 # Downloaded weights/variables from pre-trained models
-models/
+model/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

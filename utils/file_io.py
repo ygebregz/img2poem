@@ -1,6 +1,8 @@
 """
-Helps to write Villanelle poems to text files and creating
-VillanellePoem objects from existing text files
+@author: Yonas Gebregziabher, CSCI 3725, M7: Poetry Slam
+
+Helper functions to write/read poems from file. It also 
+provides wrappers to read poem lines out-loud using TTS. 
 """
 
 from src.poem import VillanellePoem
@@ -17,8 +19,8 @@ def speak_lines(poem_lines: List[str]) -> None:
         tts.runAndWait()
 
 
-def write_to_file(poem_object: VillanellePoem, poem_num: str) -> None:
-    with open(f"outputs/poem_{poem_num}.txt", "w") as file:
+def write_to_file(poem_object: VillanellePoem, poem_name: str) -> None:
+    with open(f"outputs/poem_{poem_name.strip()}.txt", "w") as file:
         file.write(str(poem_object))
 
 
