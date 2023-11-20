@@ -6,37 +6,10 @@ M7: Poetry Generation
 
 ### Sample Poem
 
-Prompt Image:
-![frank_ocean_bike](https://github.com/ygebregz/img2poem/assets/86376122/e17f6f0f-7cf0-4e87-9e51-429f8c01494f)
+| Prompt Image: | Generated poem |
+| --- | --- |
+| <img src="https://github.com/ygebregz/img2poem/assets/86376122/e17f6f0f-7cf0-4e87-9e51-429f8c01494f" width="400" alt="frank_ocean_bike"> | New truck same boy<br>Another concept from a boy mind<br>This notion from this boy roy<br><br>Everyone has there toy<br>Everyone grows since this kind<br>New truck same boy<br><br>Hit this route like road soy<br>We come down this blind<br>This notion from this boy roy<br><br>Dim this lamps and rise out you joy<br>Mesmerized why this strobes rind<br>New truck same boy<br><br>But you have been dreaming of their coy<br>But you gorgeous to bind<br>This notion from this boy roy<br><br>Super rich youngsters while anything but loose troy<br>Regardless of winning rather of hind<br>New truck same boy<br>This notion from this boy roy |
 
-Generated poem:
-
-```
-New truck same boy
-Another concept from a boy mind
-This notion from this boy roy
-
-Everyone has there toy
-Everyone grows since this kind
-New truck same boy
-
-Hit this route like road soy
-We come down this blind
-This notion from this boy roy
-
-Dim this lamps and rise out you joy
-Mesmerized why this strobes rind
-New truck same boy
-
-But you have been dreaming of their coy
-But you gorgeous to bind
-This notion from this boy roy
-
-Super rich youngsters while anything but loose troy
-Regardless of winning rather of hind
-New truck same boy
-This notion from this boy roy
-```
 
 ### Ideas
 
