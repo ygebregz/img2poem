@@ -88,6 +88,7 @@ class LanguageUtility:
         except:
             return word
         perfect_rhymes = complete_rhymes.get(1)
+
         if perfect_rhymes is None:
             perfect_rhymes = []
             for key in complete_rhymes.keys():

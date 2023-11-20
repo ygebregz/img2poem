@@ -10,15 +10,15 @@ from src.poem import VillanellePoem
 from src.lang_utility import LanguageUtility
 from src.model import SemanticSearchModel
 from utils.file_io import write_to_file, read_from_file, read_from_object
+import os
 
-# img_detection = ImageObjectDetection()
+img_detection = ImageObjectDetection()
 smtic_model = SemanticSearchModel()
 lang_util = LanguageUtility("model/glove.6B.300d.txt")
-# image_out = img_detection.get_img_output_layers(
-# "data/images/frank_ocean_bike.jpeg")
-# objs_detected = img_detection.get_label(image_out)
-# print(objs_detected)
-objs_detected = ["car", "traffic", "light", "person"]
+image_out = img_detection.get_img_output_layers(
+    "data/images/frank_ocean_bike.jpeg")
+objs_detected = img_detection.get_label(image_out)
+print("Objects detected: ", objs_detected)
 complete_queries = lang_util.gen_quality_queries(objs_detected)
 poem = VillanellePoem(complete_queries, lang_util, smtic_model)
 
@@ -34,9 +34,16 @@ while True:
                 is_invalid = False
                 print(poem)
                 read_from_object(poem)
+
     elif ask_input == "read":
-        file_path = input("Enter the file path: ")
-        read_from_file(file_path)
+        file_path = ""
+        while not os.path.exists(file_path):
+            file_path = input("Enter the file path: ")
+            if not os.path.exists(file_path):
+                print("Invalid file path. Please try again.")
+            else:
+                read_from_file(file_path)
+
     elif ask_input == "save":
         name = input("Enter poem name: ")
         write_to_file(poem, name)
