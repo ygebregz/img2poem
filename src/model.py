@@ -55,6 +55,15 @@ class SemanticSearchModel:
             pickle.dump(self.embeddings, embedding)
         print(f"Embedded and saved to {self.embeddings_path} ")
 
+    def get_similarity_score(self, sentence_1: str, sentence_2: str) -> float:
+        "Returns normalized similarity between two texts"
+        sentence_1_embedding = self.model([sentence_1])
+        sentence_2_embedding = self.model([sentence_2])
+        similarity_score = cosine_similarity(
+            sentence_1_embedding, sentence_2_embedding)[0][0] / 1
+        normalized = (similarity_score - 0.0) / (0.30 - 0)
+        return normalized * 100
+
     def search(self, query: str, k: int = 25, target_len: int = 0,
                already_used_lines: set[str] = set()):
         """
@@ -81,5 +90,9 @@ class SemanticSearchModel:
             if len(line) == target_len:
                 desired_lengths.append(sim_lyrics[i])
         if len(desired_lengths) == 0:
-            return [sim_lyrics[max_length_index].strip("\n")]
+            if len(sim_lyrics) > 0:  # return best result
+                return [sim_lyrics[max_length_index].strip("\n")]
+            else:  # return any result
+                return [random.choice(get_lyrics()).strip("\n")]
+        # return random perfect match result
         return [random.choice(desired_lengths).strip("\n")]

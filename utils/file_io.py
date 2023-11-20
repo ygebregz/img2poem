@@ -29,11 +29,9 @@ def read_from_file(file_path: str) -> None:
         poem_lines = file.readlines()
     for line in poem_lines:
         print(line)
-    speak_lines(poem_lines)
+    speak_lines(poem_lines[:-3])  # we don't want it to read the scores
 
 
 def read_from_object(poem: VillanellePoem):
-    lines = []
-    for stanza in poem.stanzas:
-        lines.extend(stanza.get_all_lines())
+    lines = poem.get_all_poem_lines()
     speak_lines(lines)

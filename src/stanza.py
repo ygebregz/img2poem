@@ -26,13 +26,6 @@ class Stanza:
         "Return all of the stanza's lines"
         return self.lines
 
-    def is_valid_stanza(self) -> bool:
-        "Checks if it contains the required number of lines"
-        if self.order != 6 and len(self.lines) != 3:
-            return False
-        if self.order == 6 and len(self.lines) != 4:
-            return False
-
     def __str__(self) -> str:
         "Get a string representation of the stanza"
         stanza_lines = ""

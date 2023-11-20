@@ -76,6 +76,11 @@ class LanguageUtility:
 
     def find_rhyming_word(self, word, pos_tag_last, replacement_word: str,
                           used_rhymes: set[str]):
+        """
+        Finds a rhyming word that matches the POS tag and
+        is semantically related to the word it is replacing that 
+        has not yet been used. 
+        """
         complete_rhymes = []
         try:
             complete_rhymes = self.ph.get_perfect_rhymes(
@@ -111,6 +116,13 @@ class LanguageUtility:
         "Removes the non alphabetical characters from a word"
         return re.sub('[^a-zA-Z]', '', word)
 
+    def does_rhyme(self, word_1: str, word_2: str) -> bool:
+        "Checks whether two words rhyme with each other"
+        rhymes = self.ph.get_perfect_rhymes(word_1)
+        result_list = set([rhyme for perfect_rhymes in rhymes.values()
+                           for rhyme in perfect_rhymes])
+        return word_2 in result_list
+
     def gen_quality_queries(self, detected_objects: List[str]) -> List[str]:
         """
         This sentences generates queries to fetch the highest
@@ -126,7 +138,7 @@ class LanguageUtility:
         for obj in detected_objects_new:
             word_embedding = self.glove_model.get(obj)
             synonyms = self.find_closest_embeddings(
-                word_embedding, PROXIMITY_DISTANCE)
+                word_embedding, 5)
             complete_queries.append(" ".join(synonyms))
         return complete_queries
 
