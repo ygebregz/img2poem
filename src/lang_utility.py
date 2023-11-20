@@ -16,7 +16,7 @@ from Phyme import Phyme
 import nltk
 import re
 
-PROXIMITY_DISTANCE = 3
+PROXIMITY_DISTANCE = 3  # semantic distance to word
 
 
 class LanguageUtility:
@@ -95,7 +95,8 @@ class LanguageUtility:
                 perfect_rhymes.extend(complete_rhymes[key])
         match_pos_unused = [rhyme for rhyme in perfect_rhymes if pos_tag([rhyme])[
             0][1] == pos_tag_last and word != rhyme and rhyme != replacement_word
-            and rhyme not in used_rhymes]  # same pos thats a different word
+            and rhyme not in used_rhymes]
+        # same pos thats a different word that hasn't been used
 
         similarity_scores = [(similar_word, self.calculate_similarity(
             replacement_word, similar_word)) for similar_word in match_pos_unused]

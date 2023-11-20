@@ -1,15 +1,10 @@
 # img2poem
 
-Embeddings are all you need!
+Embeddings are all you need! M7: Poetry Generation
 
-M7: Poetry Generation
-
-### Sample Poem
-
-| Prompt Image: | Generated poem |
-| --- | --- |
+| Prompt Image:                                                                                                                            | Generated poem                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | <img src="https://github.com/ygebregz/img2poem/assets/86376122/e17f6f0f-7cf0-4e87-9e51-429f8c01494f" width="400" alt="frank_ocean_bike"> | New truck same boy<br>Another concept from a boy mind<br>This notion from this boy roy<br><br>Everyone has there toy<br>Everyone grows since this kind<br>New truck same boy<br><br>Hit this route like road soy<br>We come down this blind<br>This notion from this boy roy<br><br>Dim this lamps and rise out you joy<br>Mesmerized why this strobes rind<br>New truck same boy<br><br>But you have been dreaming of their coy<br>But you gorgeous to bind<br>This notion from this boy roy<br><br>Super rich youngsters while anything but loose troy<br>Regardless of winning rather of hind<br>New truck same boy<br>This notion from this boy roy |
-
 
 ### Ideas
 
